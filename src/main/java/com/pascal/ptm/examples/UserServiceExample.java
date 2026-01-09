@@ -1,10 +1,7 @@
 package com.pascal.ptm.examples;
 
-import com.pascal.ptm.entities.Ticket;
 import com.pascal.ptm.entities.User;
-import com.pascal.ptm.repo.TicketRepo;
 import com.pascal.ptm.repo.UserRepo;
-import com.pascal.ptm.service.TicketService;
 import com.pascal.ptm.service.UserService;
 import com.pascal.ptm.utils.Datasource;
 

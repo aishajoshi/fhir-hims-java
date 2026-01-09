@@ -1,6 +1,5 @@
 package com.pascal.ptm.controllers;
 
-import com.pascal.ptm.endpoint.ParkingTicketManagementService;
 import com.pascal.ptm.entities.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
