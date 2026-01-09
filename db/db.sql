@@ -1,31 +1,21 @@
-create database parking_ticket_management;
-use parking_ticket_management;
-create table user
-(
-    user_id    INT AUTO_INCREMENT primary key,
-    username   VARCHAR(50)  NOT NULL,
-    email      VARCHAR(100) NOT NULL,
-    password   VARCHAR(225) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (email)
+CREATE DATABASE fhir_hims;
+USE fhir_hims;
+CREATE TABLE patient (
+                         id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+                         fhir_id VARCHAR(64) UNIQUE NOT NULL,
+
+                         first_name VARCHAR(100),
+                         last_name VARCHAR(100),
+
+                         gender VARCHAR(20),
+                         birth_date DATE,
+
+                         phone VARCHAR(20),
+                         email VARCHAR(100),
+
+                         active BOOLEAN DEFAULT TRUE,
+
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-create table ticket
-(
-    ticket_id      INT AUTO_INCREMENT PRIMARY KEY,
-    ticket_number  VARCHAR(36)    not null unique,
-    vehicle_number VARCHAR(20)    NOT NULL,
-    entry_time     TIMESTAMP      NULL,
-    exit_time      TIMESTAMP      NULL,
-    total_time     BIGINT,
-    total_amount   DECIMAL(10, 2) NULL,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by     INT,
-    updated_by     INT,
-    phone          VARCHAR(10)    NULL,
-    note           VARCHAR(256)
-);
-
-
-
-
-

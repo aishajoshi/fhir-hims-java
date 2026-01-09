@@ -1,8 +1,6 @@
 package com.pascal.ptm.examples;
 
 import com.pascal.ptm.entities.User;
-import com.pascal.ptm.repo.UserRepo;
-import com.pascal.ptm.service.UserService;
 import com.pascal.ptm.utils.Datasource;
 
 import java.util.List;
