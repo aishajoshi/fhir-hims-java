@@ -1,63 +1,26 @@
-package com.hims.fhir.controller;
+package com.pascal.ptm.service;
 
-import ca.uhn.fhir.context.FhirContext;
-import com.hims.fhir.service.PatientService;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Patient;
-import org.springframework.web.bind.annotation.*;
+import com.pascal.ptm.entities.Patient;
+import com.pascal.ptm.repo.PatientRepo;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/api/fhir/patient")
-public class PatientController {
+import java.sql.SQLException;
+import java.util.List;
 
-    private final PatientService patientService;
-    private final FhirContext fhirContext;
+@Service
+public class PatientService {
 
-    public PatientController(PatientService patientService,
-                             FhirContext fhirContext) {
-        this.patientService = patientService;
-        this.fhirContext = fhirContext;
+    private final PatientRepo repo;
+
+    public PatientService(PatientRepo repo) {
+        this.repo = repo;
     }
 
-    // CREATE PATIENT
-    @PostMapping
-    public String createPatient(@RequestBody String patientJson) {
-
-        Patient patient = fhirContext
-                .newJsonParser()
-                .parseResource(Patient.class, patientJson);
-
-        patientService.createPatient(patient);
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(patient);
+    public void createPatient(Patient patient) throws SQLException {
+        repo.save(patient);
     }
 
-    // GET PATIENT BY ID
-    @GetMapping("/{id}")
-    public String getPatient(@PathVariable String id) {
-
-        Patient patient = patientService.getPatientById(id);
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(patient);
-    }
-
-    // GET ALL PATIENTS
-    @GetMapping
-    public String getAllPatients() {
-
-        Bundle bundle = new Bundle();
-        bundle.setType(Bundle.BundleType.SEARCHSET);
-
-        patientService.getAllPatients().forEach(p ->
-                bundle.addEntry().setResource(p)
-        );
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(bundle);
+    public List<Patient> getAllPatients() {
+        return repo.findAll();
     }
 }

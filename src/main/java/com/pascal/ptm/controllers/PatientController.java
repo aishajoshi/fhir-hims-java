@@ -1,63 +1,36 @@
-package com.hims.fhir.controller;
+package com.pascal.ptm.controllers;
 
-import ca.uhn.fhir.context.FhirContext;
-import com.hims.fhir.service.PatientService;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Patient;
+import com.pascal.ptm.entities.Patient;
+import com.pascal.ptm.fhir.FhirPatient;
+import com.pascal.ptm.fhir.PatientFhirMapper;
+import com.pascal.ptm.service.PatientService;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/api/fhir/patient")
+@RequestMapping("/api/patient")
 public class PatientController {
 
-    private final PatientService patientService;
-    private final FhirContext fhirContext;
+    private final PatientService service;
 
-    public PatientController(PatientService patientService,
-                             FhirContext fhirContext) {
-        this.patientService = patientService;
-        this.fhirContext = fhirContext;
+    public PatientController(PatientService service) {
+        this.service = service;
     }
 
-    // CREATE PATIENT
     @PostMapping
-    public String createPatient(@RequestBody String patientJson) {
-
-        Patient patient = fhirContext
-                .newJsonParser()
-                .parseResource(Patient.class, patientJson);
-
-        patientService.createPatient(patient);
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(patient);
+    public String create(@RequestBody Patient patient) throws SQLException {
+        service.createPatient(patient);
+        return "Patient created";
     }
 
-    // GET PATIENT BY ID
-    @GetMapping("/{id}")
-    public String getPatient(@PathVariable String id) {
-
-        Patient patient = patientService.getPatientById(id);
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(patient);
-    }
-
-    // GET ALL PATIENTS
     @GetMapping
-    public String getAllPatients() {
-
-        Bundle bundle = new Bundle();
-        bundle.setType(Bundle.BundleType.SEARCHSET);
-
-        patientService.getAllPatients().forEach(p ->
-                bundle.addEntry().setResource(p)
-        );
-
-        return fhirContext
-                .newJsonParser()
-                .encodeResourceToString(bundle);
+    public List<FhirPatient> getAll() {
+        return service.getAllPatients()
+                .stream()
+                .map(PatientFhirMapper::toFhir)
+                .collect(Collectors.toList());
     }
 }
