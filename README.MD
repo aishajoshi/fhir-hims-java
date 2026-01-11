@@ -19,3 +19,16 @@ Spring Boot (without JPA)
 JDBC
 MySQL
 REST APIs
+
+API Endpoints
+base url:
+http://localhost:8181
+Get Patient by ID:
+.GET /patients/{id}(Returns patient details from the database.)
+Create Patient(Creates a new patient record in the database.)
+Testing Approach:
+(com.pascal.ptm.examples.PatientServiceExample)
+
+
+
+
